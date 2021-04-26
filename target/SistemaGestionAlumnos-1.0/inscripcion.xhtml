@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Inscripcion</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <p:ajaxStatus style="width: 16px;height: 16px;" id="ajaxStatusPanel">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="ajaxloading.gif" />
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+
+        </p:ajaxStatus>
+        
+        <h:form id="subjectsListForm1">
+            <p:growl id="messages" showDetail="true" />
+            <p:messages/>
+
+            <p:dataTable id="subjectsDataTable1" value="#{subjectsBean.subjects}" var="subjects" editable="true" rowKey="#{subjects.idSubjects}" 
+                         selection="#{subjectsBean.subjectsSeleccionada}" selectionMode="single" >
+
+                <f:facet name="header">
+                    Inscripcion
+                </f:facet>
+
+                <p:column headerText="Id">
+                    <h:outputText value="#{subjects.idSubjects}" />
+                </p:column>
+
+                <p:column headerText="Materia">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{subjects.name}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{subjects.name}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                
+                <p:column headerText="Nombre y apellido">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{subjects.enrolled}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{subjects.enrolled}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Horario">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{subjects.schedule}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{subjects.schedule}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <f:facet name="footer">
+                    <p:commandButton value="Regresar" action="index" />
+                    <p:spacer height="5px"/>
+                    <p:commandButton value="Inscribirse a Materias" actionListener="#{subjectsBean.reiniciarSubjectsSeleccionada}"
+                                     update=":Form1" oncomplete="PF('Dialog1').show()"/>
+                </f:facet>
+                
+            </p:dataTable>
+        
+        </h:form>    
+                
+        
+        <p:dialog id="Dlg1" widgetVar="Dialog1" header="Inscribirse a Materias" modal="true" showEffect="fade" hideEffect="fade" 
+                  resizable="false" >
+            <h:form id="Form1">
+                <p:outputPanel id="Detail" style="text-align: center">
+                    <p:panelGrid id="display" columns="4" columnClasses="label, value" >
+                        <h:outputText value="Materia" />
+                        <h:inputText value="#{subjectsBean.subjectsSeleccionada.name}" />
+
+                        <h:outputText value="Horario" />
+                        <h:inputText value="#{subjectsBean.subjectsSeleccionada.schedule}" />
+
+                        <h:outputText value="Nombre y Apellido del alumno" />
+                        <h:inputText value="#{subjectsBean.subjectsSeleccionada.enrolled}" />
+
+                        
+
+                        <f:facet name="footer" >
+                            <p:commandButton value="Inscribirse" actionListener="#{subjectsBean.inscribirse}" 
+                                             update="display,:subjectsListForm1:subjectsDataTable1" oncomplete="PF('subjectsDialog1').hide();" />
+
+                        </f:facet>
+
+
+                    </p:panelGrid>
+                </p:outputPanel>
+
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>
+</html>
